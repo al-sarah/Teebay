@@ -19,7 +19,6 @@ const ProductView = () => {
   const [currentTabIndex, setCurrentTabIndex] = useState(1);
 
   const handleTabChange = (e, tabIndex) => {
-    console.log(tabIndex);
     setCurrentTabIndex(tabIndex);
   };
 
@@ -41,9 +40,7 @@ const ProductView = () => {
       axios
         .get(`http://localhost:5000/${id}/products`)
         .then((data) => {
-          console.log(data);
           setProductCollection(data.data);
-          console.log(data.data[0]);
         })
         .catch(function (error) {
           console.log(error);
@@ -52,15 +49,13 @@ const ProductView = () => {
       axios
         .get("http://localhost:5000/all-products")
         .then((data) => {
-          console.log(data);
           setProductCollection(data.data);
-          console.log(data.data[0]);
         })
         .catch(function (error) {
           console.log(error);
         });
     }
-  }, [isDeleted]);
+  }, [isDeleted, currentTabIndex]);
 
   return (
     <div className="product_view_page">

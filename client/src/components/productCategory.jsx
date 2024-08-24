@@ -13,24 +13,10 @@ const ProductCategory = () => {
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState([]);
 
-  //   const fetchCategories = () => {
-  //     axios
-  //       .get("http://localhost:5000/categories")
-  //       .then((data) => {
-  //         //this console.log will be in our frontend console
-  //         return data;
-  //       })
-  //       .catch(function (error) {
-  //         console.log(error);
-  //       });
-  //   };
-
   useEffect(() => {
     axios
       .get("http://localhost:5000/categories")
       .then((data) => {
-        console.log(data);
-        //this console.log will be in our frontend console
         setCategoryOptions(data.data);
       })
       .catch(function (error) {
@@ -38,7 +24,6 @@ const ProductCategory = () => {
       });
   }, []);
 
-  
   return (
     <div className="centre">
       <div className="input_title">Select categories</div>

@@ -29,6 +29,7 @@ model Product {
   title      String
   description String
   categories Category[]
+  status Status @default(available)
 
    price       Price?      @relation(fields: [priceId], references: [id])
   user User  @relation(fields: [userId], references: [id])
@@ -46,12 +47,22 @@ OUTDOOR
 TOYS
 }
 
+enum Status {
+bought
+sold
+borrowed
+lent
+available
+}
+
 model Price {
    id    Int    @id @default(autoincrement())
   purchasePrice Float
   rent Int
   validity Validity @default(perHour)
  product       Product?
+ rentFrom DateTime?
+ rentTo DateTime?
 }
 
 enum Validity {

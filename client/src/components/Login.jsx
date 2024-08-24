@@ -10,9 +10,6 @@ const Login = () => {
     axios
       .post("http://localhost:5000/login", values, { withCredentials: true })
       .then((data) => {
-        //this console.log will be in our frontend console
-        console.log(data);
-
         navigate(`/${data.data.id}/products`);
       })
       .catch(function (error) {

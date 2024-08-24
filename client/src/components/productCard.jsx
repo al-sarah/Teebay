@@ -3,13 +3,11 @@ import axios from "axios";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 
 const ProductCard = ({ products, currentTabIndex, setIsDeleted }) => {
-  console.log("welldev", products);
   const navigate = useNavigate();
   const handleClick = (id) => {
     if (currentTabIndex === 1) {
       navigate(`/products/${id}/edit`);
     } else {
-      console.log("khjdksah");
       navigate(`/products/${id}/show`);
     }
   };
@@ -18,7 +16,6 @@ const ProductCard = ({ products, currentTabIndex, setIsDeleted }) => {
     axios
       .delete(`http://localhost:5000/product/${id}`) // Corrected template literal usage
       .then((response) => {
-        console.log(response.data); // 'data' property contains the actual response
         setIsDeleted(id);
       })
       .catch((error) => {

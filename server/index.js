@@ -126,7 +126,7 @@ res.json(post)
     });
 
   app.get('/get-session', (req, res)=>{
-    console.log("SARAH",req.session)
+   
     
     if (req.session.user) {
         res.send('Session data: '
@@ -140,7 +140,7 @@ res.json(post)
   app.post('/products', async (req, res) => {
     const data = req.body;
     const price = await prisma.price.create({data: {purchasePrice: parseFloat(data.price.purchase_price), rent: parseInt(data.price.rent_rate, 10) , validity: data.price.validity}})
-    console.log("SARAH", req.session);
+    
     const user = req.session.user;
     const categories = data.categories.map((category) => category);
 
@@ -237,7 +237,7 @@ res.json(updateProduct);
     page: 1,
     includePageCount: true,
   });
-  console.log(response);
+ 
   res.json(response);
 
   });
@@ -258,7 +258,7 @@ res.json(updateProduct);
     page: 1,
     includePageCount: true,
   });
-  console.log(response);
+
   res.json(response);
 
   });
@@ -287,3 +287,71 @@ res.json(updateProduct);
         })
         res.json(product)
   })
+
+  app.put('/product/:id/buy', async (req, res) => {
+    const { id } = req.params;
+  
+    const product = await prisma.product.findFirst({
+      where: {
+        id: parseInt(id, 10),
+        status: 'available', // Check status directly in the query
+      },
+    });
+  
+    if (product) {
+      await prisma.product.update({
+        where: { id: product.id },
+        data: { status: 'bought' }, // Update the status to 'bought'
+      });
+  
+      res.status(200).json({ success: 'The product is purchased' });
+    } else {
+      res.status(404).json({ error: 'Product not found or not available' });
+    }
+  });
+  
+
+  app.put('/product/:id/rent', async (req, res) => {
+    const { id } = req.params;
+    const { dateFrom, dateTo } = req.body;
+    const rentFrom = new Date(dateFrom);
+    const rentTo = new Date(dateTo);
+
+  
+    const product = await prisma.product.findFirst({
+      where: {
+        id: parseInt(id, 10),
+        status: 'available', // Check status directly in the query
+      },
+    });
+  
+    if (product) {
+      const existingRentFrom = product.rentFrom ? new Date(product.rentFrom) : null;
+      const existingRentTo = product.rentTo ? new Date(product.rentTo) : null;
+
+      const isOverlapping = (existingRentFrom && existingRentTo) &&
+        ((rentFrom <= existingRentTo && rentTo >= existingRentFrom) ||
+        (rentTo >= existingRentFrom && rentFrom <= existingRentTo));
+
+        if (isOverlapping) {
+          return res.status(400).json({ error: 'The requested rental dates overlap with an existing rental.' });
+        }
+
+      await prisma.product.update({
+        where: { id: product.id },
+        data: { status: 'lent' },
+      });
+
+      await prisma.price.update({
+        where: { id: product.priceId },
+        data: {
+          rentFrom: rentFrom,
+          rentTo: rentTo,
+        },
+      });
+  
+      res.status(200).json({ success: 'The product is rented successfully' });
+    } else {
+      res.status(404).json({ error: 'Product not found or not available' });
+    }
+  });

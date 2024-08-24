@@ -6,10 +6,7 @@ import axios from "axios";
 const onSubmit = (values) => {
   axios
     .post("http://localhost:5000/user", values)
-    .then((data) => {
-      //this console.log will be in our frontend console
-      console.log(data);
-    })
+    .then((data) => {})
     .catch(function (error) {
       console.log(error);
     });

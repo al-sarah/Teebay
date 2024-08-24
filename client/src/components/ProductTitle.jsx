@@ -22,7 +22,6 @@ const ProductTitle = () => {
         <Button
           variant="contained"
           onClick={() => {
-            console.log("SARAh", formData);
             setFormData({ ...formData, title: title });
             navigate("/create_products/category");
           }}

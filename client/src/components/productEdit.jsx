@@ -20,14 +20,11 @@ const ProductEdit = () => {
   const rentTime = ["perHour", "perDay", "perMonth"];
   const [selectedTime, setSelectedTime] = useState([]);
   const [data, setData] = useState({});
-  console.log(selectedCategory);
 
   useEffect(() => {
     axios
       .get("http://localhost:5000/categories")
       .then((data) => {
-        console.log(data);
-        //this console.log will be in our frontend console
         setCategoryOptions(data.data);
       })
       .catch(function (error) {
@@ -39,8 +36,7 @@ const ProductEdit = () => {
       .then((data) => {
         setSelectedCategory(data.data.categories);
         setSelectedTime(data.data.price?.validity);
-        console.log(data);
-        //this console.log will be in our frontend console
+
         setData(data.data);
       })
       .catch(function (error) {
@@ -49,7 +45,6 @@ const ProductEdit = () => {
   }, []);
 
   const onSubmit = (values) => {
-    console.log("SARAH", values);
     let payload = {
       title: values.title,
       description: values.description,
@@ -71,7 +66,6 @@ const ProductEdit = () => {
       });
   };
   const validate = () => {};
-  console.log("FARAH", selectedCategory);
 
   return (
     <div className="edit_form_wrapper">

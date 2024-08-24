@@ -7,7 +7,6 @@ import axios from "axios";
 const ProductSummary = () => {
   const navigate = useNavigate();
   const { formData, setFormData } = useForm();
-  console.log(formData);
 
   const onSubmit = () => {
     axios
@@ -15,8 +14,6 @@ const ProductSummary = () => {
         withCredentials: true,
       })
       .then((data) => {
-        //this console.log will be in our frontend console
-        console.log(data);
         navigate(`/${data.data.id}/products`);
       })
       .catch(function (error) {

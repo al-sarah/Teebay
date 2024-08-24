@@ -7,7 +7,6 @@ const ProductDescription = ({ form }) => {
   const [description, setDescription] = useState("");
   const { formData, setFormData } = useForm();
   const navigate = useNavigate();
-  // console.log(form);
 
   return (
     <div className="input_description">
@@ -32,7 +31,6 @@ const ProductDescription = ({ form }) => {
         <Button
           variant="contained"
           onClick={() => {
-            console.log(formData);
             setFormData({ ...formData, description: description });
             navigate("/create_products/price");
           }}
