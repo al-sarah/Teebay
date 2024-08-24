@@ -21,29 +21,30 @@ Before you begin, ensure you have the following installed on your system:
   - cd backend
   - npm install
 
--  ## Set Up the Database
+-  #### Set Up the Database
   - Create a new PostgreSQL database
     - In your .env file, set your DATABASE_URL:
       -- DATABASE_URL="postgresql://username:password@localhost:5432/database_name?schema=public"
 
-- ## Run Database Migrations
+- #### Run Database Migrations
   - Generate and run the Prisma migrations to set up your database schema:
     -npx prisma migrate dev
 
-- ## Start the Backend Server
+- #### Start the Backend Server
   - npm start
   - The backend server should now be running on http://localhost:5000.
 
 ### 3. Set Up the FrontEnd
-  - # Install Dependencies
+  - #### Install Dependencies
     - Navigate to the client directory and install the required dependencies:
     - cd client
     - npm install
       
-  - # Start the Frontend Development Server
+  - #### Start the Frontend Development Server
    - npm start
      
 ### 4. Running the Application
+
   -Backend: http://localhost:5000
   -Frontend: http://localhost:3000
 
