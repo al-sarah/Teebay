@@ -17,6 +17,7 @@ const ProductSummary = () => {
       .then((data) => {
         //this console.log will be in our frontend console
         console.log(data);
+        navigate(`/${data.data.id}/products`);
       })
       .catch(function (error) {
         console.log(error);

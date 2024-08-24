@@ -112,6 +112,19 @@ res.json(post)
     }
   });
 
+  app.get('/logout',
+    async(req, res) => {
+        // Destroy session
+        req.session.destroy((err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Error logging out');
+            } else {
+              return res.status(200).send('Logged out successfully');
+            }
+        });
+    });
+
   app.get('/get-session', (req, res)=>{
     console.log("SARAH",req.session)
     
@@ -149,7 +162,7 @@ res.json(post)
     },
   }
   )
-  res.json(product)
+  res.json(user)
     })
 
     app.patch('/product/:id/edit',  async (req, res) => {
@@ -212,17 +225,7 @@ res.json(updateProduct);
   })
 
 
-  app.get('/products', async (req, res) => {
-    // const products = await paginate(prisma.product)({
-    //   include: {
-    //     price: true, // Include the associated price
-    //   },
-    // }, {
-    //   page: 1,
-    //   limit: 10,
-    // });
-  
-    // res.json(products);
+  app.get('/all-products', async (req, res) => {
     const [response] = await xprisma.product
   .paginate({
     include: {
@@ -238,6 +241,28 @@ res.json(updateProduct);
   res.json(response);
 
   });
+
+  app.get('/:id/products', async (req, res) => {
+    const { id } = req.params;
+    const [response] = await xprisma.product
+  .paginate({
+    where: {
+      userId: parseInt(id, 10),
+    },
+    include: {
+      price: true,
+    }
+  })
+  .withPages({
+    limit: 10,
+    page: 1,
+    includePageCount: true,
+  });
+  console.log(response);
+  res.json(response);
+
+  });
+
 
 
   app.delete('/product/:id', async (req, res) => {

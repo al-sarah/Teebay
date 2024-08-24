@@ -11,6 +11,7 @@ import ProductPrice from "./components/productPrice";
 import ProductSummary from "./components/productSummary";
 import { FormProvider } from "./components/Formcontext.js";
 import ProductEdit from "./components/productEdit.jsx";
+import ProductShow from "./components/productShow.jsx";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/create_products/price" element={<ProductPrice />} />
         <Route path="/create_products/summary" element={<ProductSummary />} />
         <Route path="/products/:id/edit" element={<ProductEdit />} />
+        <Route path="/products/:id/show" element={<ProductShow />} />
       </Routes>
     </div>
   </FormProvider>

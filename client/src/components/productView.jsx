@@ -3,87 +3,113 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import ProductCard from "./productCard.jsx";
+import { Tab, Tabs } from "@mui/material";
+import TabPanel from "@mui/lab/TabPanel";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import { useParams } from "react-router-dom";
 
 const ProductView = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [productCollection, setProductCollection] = useState([]);
   const [isDeleted, setIsDeleted] = useState();
 
-  const deleteProduct = (id) => {
+  const [currentTabIndex, setCurrentTabIndex] = useState(1);
+
+  const handleTabChange = (e, tabIndex) => {
+    console.log(tabIndex);
+    setCurrentTabIndex(tabIndex);
+  };
+
+  const handleLogOut = () => {
     axios
-      .delete(`http://localhost:5000/product/${id}`) // Corrected template literal usage
+      .get("http://localhost:5000/logout")
       .then((response) => {
-        console.log(response.data); // 'data' property contains the actual response
-        setIsDeleted(id);
+        if (response.status === 200) {
+          navigate(`/`);
+        }
       })
       .catch((error) => {
-        console.error(error); // Use console.error to log errors
+        console.log(error);
       });
   };
 
-  const handleClick = (id) => {
-    navigate(`/products/${id}/edit`);
-  };
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/products")
-      .then((data) => {
-        console.log(data);
-        setProductCollection(data.data);
-        console.log(data.data[0]);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
-    axios
-      .get("http://localhost:5000/get-session", { withCredentials: true })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    if (currentTabIndex === 1) {
+      axios
+        .get(`http://localhost:5000/${id}/products`)
+        .then((data) => {
+          console.log(data);
+          setProductCollection(data.data);
+          console.log(data.data[0]);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else if (currentTabIndex === 2) {
+      axios
+        .get("http://localhost:5000/all-products")
+        .then((data) => {
+          console.log(data);
+          setProductCollection(data.data);
+          console.log(data.data[0]);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   }, [isDeleted]);
 
   return (
-    // <div>
+    <div className="product_view_page">
+      <TabContext value={currentTabIndex}>
+        <TabList onChange={handleTabChange} variant="fullWidth">
+          <Tab label="My Products" value={1} />
+          <Tab label="All products" value={2} />
+        </TabList>
 
-    // </div>as
-    <div className="view-wrapper">
-      <div>
-        <div className="view_main_heading">My Products</div>
-      </div>
-      {productCollection.map((product, index) => (
-        <div
-          key={index}
-          className="view_items"
-          onClick={() => handleClick(product.id)}
-        >
-          <div className="view_items_wrapper">
-            <div>{product.title}</div>
-            <div>Categories {product.categories.join(" ")}</div>
-            <div>
-              Price {product.price.purchasePrice} Rent: {product.price.rent}{" "}
-              {product.price.validity}
-            </div>
-            <div>product.description</div>
-            <div>product.createdAt</div>
-          </div>
-          <DeleteOutlinedIcon
-            fontSize="large"
-            onClick={() => deleteProduct(product.id)} // Wrap the function call in an arrow function
-          />
+        <div className="logout-button">
+          <Button
+            variant="contained"
+            onClick={() => {
+              handleLogOut();
+            }}
+          >
+            LogOut
+          </Button>
         </div>
-      ))}
-      <Button
-        variant="contained"
-        onClick={() => {
-          navigate("/create_products/title");
-        }}
-      >
-        Add Product
-      </Button>
+
+        <TabPanel value={1}>
+          <div className="view-wrapper">
+            <div className="view_main_heading">My Products</div>
+
+            <ProductCard
+              products={productCollection}
+              currentTabIndex={currentTabIndex}
+              setIsDeleted={setIsDeleted}
+            />
+            <div className="add_product_button">
+              <Button
+                variant="contained"
+                onClick={() => {
+                  navigate("/create_products/title");
+                }}
+              >
+                Add Product
+              </Button>
+            </div>
+          </div>
+        </TabPanel>
+        <TabPanel value={2}>
+          <div className="view-wrapper">
+            <div className="view_main_heading">All Products</div>
+
+            <ProductCard products={productCollection} />
+          </div>
+        </TabPanel>
+      </TabContext>
     </div>
   );
 };

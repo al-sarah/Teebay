@@ -315,3 +315,22 @@ padding-top: 35px;
     margin-top: 24px;
 
    }
+
+   .product_view_page {
+    width: 1000px;
+   }
+
+   .product_show_page {
+    margin-top: 30%;
+   }
+
+   .logout-button {
+    position: absolute;
+    left: 85%;
+    bottom: 85%;
+   }
+
+   .add_product_button {
+    margin-top: 10%;
+    margin-left: 85%;
+   }
